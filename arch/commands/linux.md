@@ -1,20 +1,26 @@
 # **Useful Linux Commands**
 
-## Display the Content of Files in a Directory
+## Display the Content of Files in a Directory **Recursively with Exclusions**
 
-To print the content of all files in the current directory:
-
-```sh
-for file in *; do echo "Content of $file:"; cat "$file"; echo; done
-```
-
-## Display the Content of Files in a Directory **Recursively**
-
-To recursively print the content of all files in subdirectories:
+Recursively prints the content of all files while ignoring specific ones:
 
 ```sh
-find . -type f -exec echo "Content of {}:" \; -exec cat {} \; -exec echo \;
+find . -type f ! -name "filename" -exec sh -c 'echo "Content of $1:"; cat "$1"; echo' sh {} \;
 ```
+
+To exclude additional files, append `! -name "filename"` for each file to be ignored.
+If no exclusions are specified, all files are processed.
+
+## Display the Content of Files in a Directory **with Exclusions**
+
+Prints the content of all files in the current directory while ignoring specific ones:
+
+```sh
+for file in *; do [[ " filename " =~ " $file " ]] && continue; echo "Content of $file:"; cat "$file"; echo; done
+```
+
+To exclude additional files, add their names inside the quoted space-separated list. If no exclusions are specified, all
+files are processed.
 
 ## Find Manually Installed Packages
 
